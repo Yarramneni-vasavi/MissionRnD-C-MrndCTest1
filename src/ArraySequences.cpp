@@ -33,5 +33,106 @@ Difficulty : Medium
 
 int * find_sequences(int *arr, int len){
 	//Return final array which has 6indexes [AP1_S,AP1_E,AP2_S,AP2_E,GP1_S,GP2_E]
-	return NULL;
+	if (arr == NULL)
+		return NULL;
+
+	int *result_array = (int *)malloc(sizeof(int) * 6);
+	float quo1, quo2;
+	int quo1_index, quo2_index;
+
+	quo1_index = 0; 	quo2_index = 0;
+	int flag = 0;
+	// to find first GP
+	for (int i = 0; i < len - 1; i++)
+	{
+		quo1 = ((double)arr[i + 1]) / arr[i];
+		quo2 = ((double)arr[i + 2]) / arr[i + 1];
+		if (flag == 0)
+		{
+			quo1_index = i;
+		}
+		if (quo1 == quo2)
+		{
+			flag = 1;
+			quo1 = quo2;
+			quo2_index = i + 2;
+		}
+		else if (quo2_index - quo1_index >= 2)
+		{
+			break;
+		}
+		else
+		{
+			quo1 = quo2;
+			quo2_index = i;
+		}
+	}
+
+	result_array[4] = quo1_index;
+	result_array[5] = quo2_index;
+	//to find first AP
+	int diff1, diff2, APflag = 0;
+	quo1_index = 0; 	quo2_index = 0;
+	int i;
+	for (i = 0; i < len; i++)
+	{
+		diff1 = arr[i + 1] - arr[i];
+		diff2 = arr[i + 2] - arr[i + 1];
+		if (APflag == 0)
+		{
+			quo1_index = i;
+		}
+		if (diff1 == diff2)
+		{
+			APflag = 1;
+			diff1 = diff2;
+			quo2_index = i + 2;
+		}
+		else if (quo2_index - quo1_index >= 2)
+		{
+			break;
+		}
+		else
+		{
+			diff1 = diff2;
+			quo2_index = i;
+		}
+	}
+
+	result_array[0] = quo1_index;
+	result_array[1] = quo2_index;
+
+	int trace = quo2_index;
+	quo1_index = 0; 	quo2_index = 0;
+	APflag = 0;
+	// to find second AP
+	for (int k = trace; k < len; k++)
+	{
+		diff1 = arr[k + 1] - arr[k];
+		diff2 = arr[k + 2] - arr[k + 1];
+		if (APflag == 0)
+		{
+			quo1_index = k;
+		}
+		if (diff1 == diff2)
+		{
+			APflag = 1;
+			diff1 = diff2;
+			quo2_index = k + 2;
+		}
+		else if (quo2_index - quo1_index >= 2)
+		{
+			break;
+		}
+		else
+		{
+			diff1 = diff2;
+			quo2_index = k;
+		}
+	}
+
+	result_array[2] = quo1_index;
+	result_array[3] = quo2_index;
+
+	return result_array;
 }
