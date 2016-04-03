@@ -30,5 +30,104 @@ struct node{
 
 
 int between_days(struct node *date1head, struct node *date2head){
-	return -1;
+	if (date1head == NULL || date2head == NULL)
+		return NULL;
+
+	int count_days = 0;
+	struct node *head1 = date1head;
+	struct node *head2 = date2head;
+	int flag = 0;
+	while (head1->data != NULL)
+	{
+		if (head1->data != head2->data)
+		{
+			flag++;
+		}
+		head1->next = head1;
+		head2->next = head2;
+	}
+	if (flag == 8)
+		return 0;
+
+	int d1 = (head1->data * 10) + (head1->next->data);
+	int d2 = (head2->data * 10) + (head2->next->data);
+	head1 = head1->next->next;
+	head2 = head2->next->next;
+	int m1 = (head1->data * 10) + (head1->next->data);
+	int m2 = (head2->data * 10) + (head2->next->data);
+	head1 = head1->next->next;
+	head2 = head2->next->next;
+	int y1 = (head1->data * 1000) + (head1->next->data * 100) + (head1->next->next->data * 10) + (head1->next->next->next->data);
+	int y2 = (head2->data * 1000) + (head2->next->data * 100) + (head2->next->next->data * 10) + (head2->next->next->next->data);
+
+	if (!(m2 >= 1 && m2 <= 12 && m1 >= 1 && m1 <= 12))
+	{
+		return -1;
+	}
+	else if (m2 >= 1 && m2 <= 12 && m1 >= 1 && m1 <= 12)
+	{
+		if (m1 % 2 == 0 && m1 != 2 && !(d1 >= 1 && d1 <= 30))
+		{
+			return -1;
+		}
+		if (m2 % 2 == 0 && m2 != 2 && !(d2 >= 1 && d2 <= 30))
+		{
+			return -1;
+		}
+		if (m1 == 2 && y1 % 4 == 0 && !(d1 >= 1 && d1 <= 29))
+		{
+			return -1;
+		}
+		if (m2 == 2 && y2 % 4 == 0 && !(d2 >= 1 && d2 <= 29))
+		{
+			return -1;
+		}
+		if (m1 == 2 && y1 % 4 != 0 && !(d1 >= 1 && d1 <= 28))
+		{
+			return -1;
+		}
+		if (m2 == 2 && y2 % 4 != 0 && !(d2 >= 1 && d2 <= 28))
+		{
+			return -1;
+		}
+		if (m1 % 2 != 0 && !(d1 >= 1 && d1 <= 31))
+		{
+			return -1;
+		}
+		if (m2 % 2 != 0 && !(d2 >= 1 && d2 <= 31))
+		{
+			return -1;
+		}
+	}
+
+	if (y1 > y2 && y1 > 0 && y2 > 0)
+	{
+		for (int i = y2; i < y1; i++)
+		{
+			if (i % 4 == 0)
+			{
+				count_days = count_days + 366;
+			}
+			else
+			{
+				count_days = count_days + 365;
+			}
+		}
+		if (m1 > m2)
+		{
+			for (int i = m2; i < m1; i++)
+			{
+				if (i % 2 == 0)
+				{
+					count_days = count_days + 30;
+				}
+				else
+				{
+					count_days = count_days + 31;
+				}
+			}
+		}
+	}
+
+	return count_days;
 }
